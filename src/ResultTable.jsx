@@ -10,7 +10,7 @@ function ResultTable({ keyword, user, onAdded }) {
     fetch("https://jsonplaceholder.typicode.com/users")
       .then((res) => res.json())
       .then((data) => {
-        setUsers(data);
+        setUsers(data.slice(0, 5));
         setLoading(false);
       });
   }, []);
@@ -18,7 +18,8 @@ function ResultTable({ keyword, user, onAdded }) {
   // Khi prop user thay đổi → thêm vào danh sách
   React.useEffect(() => {
     if (user) {
-      setUsers((prev) => [...prev, { ...user, id: prev.length + 1 }]);
+      const maxId = users.length > 0 ? Math.max(...users.map((u) => u.id)) : 0;
+      setUsers((prev) => [...prev, { ...user, id: maxId + 1 }]);
       onAdded();
     }
   }, [user]);
